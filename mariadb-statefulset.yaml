@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mariadb
+spec:
+  serviceName: "mariadb"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+      - name: mariadb
+        image: public.ecr.aws/c0m6s3p2/limor/k8s-repo:wordpress
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          value: limor123  # Consider using a Kubernetes secret for this
+        - name: MARIADB_DATABASE
+          value: wordpress_db  # The initial database name, change if needed
+        - name: MARIADB_USER
+          value: wordpress  # Non-root user for WordPress connection
+        - name: MARIADB_PASSWORD
+          value: password  # Password for the non-root user
+        ports:
+        - containerPort: 3306
+          name: mariadb
+        volumeMounts:
+        - name: mariadb-persistent-storage
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: mariadb-persistent-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi 
+
+
