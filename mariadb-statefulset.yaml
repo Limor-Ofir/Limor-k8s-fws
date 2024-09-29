@@ -18,13 +18,13 @@ spec:
         image: public.ecr.aws/c0m6s3p2/limor/k8s-repo:wordpress
         env:
         - name: MARIADB_ROOT_PASSWORD
-          value: limor123  # Consider using a Kubernetes secret for this
+          value: my_password  
         - name: MARIADB_DATABASE
-          value: wordpress_db  # The initial database name, change if needed
+          value: wordpress_password
         - name: MARIADB_USER
-          value: wordpress  # Non-root user for WordPress connection
+          value: your_password
         - name: MARIADB_PASSWORD
-          value: password  # Password for the non-root user
+          value: your_password  
         ports:
         - containerPort: 3306
           name: mariadb
